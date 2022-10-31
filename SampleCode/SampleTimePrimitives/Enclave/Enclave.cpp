@@ -41,13 +41,15 @@
 #include "sgx_tae_service.h"
 #include "string.h"
 
+void goto_error(int ret);
+
 void ecall_trusted_time_primitives(void)
 {
     uint32_t ret = 0;
     int busy_retry_times = 2;
     sgx_time_source_nonce_t nonce = {0};
     sgx_time_t current_timestamp;
-    
+
     do{
         ret = sgx_create_pse_session();
     }while (ret == SGX_ERROR_BUSY && busy_retry_times--);
