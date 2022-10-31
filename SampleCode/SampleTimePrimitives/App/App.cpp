@@ -227,7 +227,6 @@ void ocall_print_string(const char *str)
     printf("%s", str);
 }
 
-
 /* Application entry */
 int SGX_CDECL main(int argc, char *argv[])
 {
@@ -254,8 +253,8 @@ int SGX_CDECL main(int argc, char *argv[])
     ecall_thread_functions();
     
     /* Utilize Time Primitives */
-    ecall_trusted_time_primitives();
-    ecall_monotonic_counter_primitives();
+    ecall_trusted_time_primitives(global_eid);
+    ecall_monotonic_counter_primitives(global_eid);
 
     /* Destroy the enclave */
     sgx_destroy_enclave(global_eid);

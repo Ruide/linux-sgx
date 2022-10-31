@@ -50,7 +50,7 @@ enclave {
     from "TrustedLibrary/Thread.edl" import *;
 
 
-   	from "sgx_tae_service.edl" import *;
+    from "sgx_tae_service.edl" import *;
 
     trusted {
         public void ecall_trusted_time_primitives(void);
