@@ -36,6 +36,111 @@
 #include "Enclave.h"
 #include "Enclave_t.h"  /* print_string */
 
+#include "sgx_trts.h"
+#include "sgx_tseal.h"
+#include "sgx_tae_service.h"
+#include "string.h"
+
+void ecall_trusted_time_primitives(void)
+{
+    uint32_t ret = 0;
+    int busy_retry_times = 2;
+    sgx_time_source_nonce_t nonce = {0};
+    sgx_time_t current_timestamp;
+    
+    do{
+        ret = sgx_create_pse_session();
+    }while (ret == SGX_ERROR_BUSY && busy_retry_times--);
+    if(ret != SGX_SUCCESS)
+    {
+        goto_error(ret);
+    } else {
+        printf("pse session successfully created\n");
+    }
+
+    ret = sgx_get_trusted_time(&current_timestamp, &nonce);
+    if(ret != SGX_SUCCESS)
+    {
+        goto_error(ret);
+    } else {
+        printf("trusted time successfully received and timestamp value is %d\n", current_timestamp);
+    }
+}
+
+void ecall_monotonic_counter_primitives(void)
+{
+    uint32_t ret = 0;
+    uint32_t mc_value = 0;
+    sgx_mc_uuid_t mc;
+    memset(&mc, 0, sizeof(mc));
+    int busy_retry_times = 2;
+
+    do{
+        ret = sgx_create_pse_session();
+    }while (ret == SGX_ERROR_BUSY && busy_retry_times--);
+    if(ret != SGX_SUCCESS)
+    {
+        goto_error(ret);
+    } else {
+        printf("pse session successfully created\n");
+    }
+
+    ret = sgx_create_monotonic_counter(&mc,&mc_value);
+    if(ret != SGX_SUCCESS)
+    {
+        goto_error(ret);
+    } else {
+        printf("monotonic_counter successfully created and counter value is %d\n",mc_value);
+    }
+
+    ret = sgx_increment_monotonic_counter(&mc,&mc_value);
+    if(ret != SGX_SUCCESS)
+    {
+        goto_error(ret);
+    } else {
+        printf("monotonic_counter successfully incremented and counter value is %d\n",mc_value);
+    }
+
+    ret = sgx_read_monotonic_counter(&mc,&mc_value);
+    if(ret != SGX_SUCCESS)
+    {
+        goto_error(ret);
+    } else {
+        printf("monotonic_counter successfully read and counter value is %d\n",mc_value);
+    }
+
+    ret = sgx_destroy_monotonic_counter(&mc);
+    if(ret != SGX_SUCCESS)
+    {
+        goto_error(ret);
+    } else {
+        printf("monotonic_counter successfully destroyed\n");
+    }
+}
+
+void goto_error(int ret)
+{
+    switch(ret)
+    {
+    case SGX_ERROR_SERVICE_UNAVAILABLE:
+        /* Architecture Enclave Service Manager is not installed or not
+        working properly.*/
+            break;
+    case SGX_ERROR_SERVICE_TIMEOUT:
+        /* retry the operation later*/
+            break;
+    case SGX_ERROR_BUSY:
+        /* retry the operation later*/
+            break;
+    case SGX_ERROR_MC_NOT_FOUND:
+        /* the the Monotonic Counter ID is invalid.*/
+            break;
+    default:
+        /*other errors*/
+        break;
+    }
+}
+
 /* 
  * printf: 
  *   Invokes OCALL to display the enclave buffer to the terminal.

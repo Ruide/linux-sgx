@@ -67,6 +67,9 @@ void ecall_libc_functions(void);
 void ecall_libcxx_functions(void);
 void ecall_thread_functions(void);
 
+void ecall_trusted_time_primitives(void);
+void ecall_monotonic_counter_primitives(void);
+
 #if defined(__cplusplus)
 }
 #endif

@@ -6,6 +6,8 @@ Extensions (Intel(R) SGX) SDK:
 - Initializing and destroying an enclave
 - Creating ECALLs or OCALLs
 - Calling trusted libraries inside the enclave
+- How an application enclave can use Monotonic Counter to implement
+replay-protected policy, and Trusted Time to enforce time based policy
 
 ------------------------------------
 How to Build/Execute the Sample Code

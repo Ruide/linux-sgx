@@ -252,6 +252,10 @@ int SGX_CDECL main(int argc, char *argv[])
     ecall_libc_functions();
     ecall_libcxx_functions();
     ecall_thread_functions();
+    
+    /* Utilize Time Primitives */
+    ecall_trusted_time_primitives();
+    ecall_monotonic_counter_primitives();
 
     /* Destroy the enclave */
     sgx_destroy_enclave(global_eid);
