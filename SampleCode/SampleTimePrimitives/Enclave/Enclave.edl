@@ -32,6 +32,13 @@
 /* Enclave.edl - Top EDL file. */
 
 enclave {
+    from "sgx_tae_service.edl" import *;
+
+    trusted {
+        public void ecall_trusted_time_primitives(void);
+        public void ecall_monotonic_counter_primitives(void);
+    };
+
     include "user_types.h" /* buffer_t */
 
     /* Import ECALL/OCALL from sub-directory EDLs.
@@ -48,14 +55,6 @@ enclave {
     from "TrustedLibrary/Libc.edl" import *;
     from "TrustedLibrary/Libcxx.edl" import ecall_exception, ecall_map;
     from "TrustedLibrary/Thread.edl" import *;
-
-
-    from "sgx_tae_service.edl" import *;
-
-    trusted {
-        public void ecall_trusted_time_primitives(void);
-        public void ecall_monotonic_counter_primitives(void);
-    };
 
     /* 
      * ocall_print_string - invokes OCALL to display string buffer inside the enclave.
