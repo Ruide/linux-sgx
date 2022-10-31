@@ -93,6 +93,7 @@ void ecall_monotonic_counter_primitives(void)
         goto_error(ret);
     } else {
         printf("monotonic_counter successfully created and counter value is %d\n",mc_value);
+        printf("monotonic_counter id created is %d %d %d, nonce is a length 13 array of uint8_t",mc.counter_id[0],mc.counter_id[1],mc.counter_id[2]);
     }
 
     ret = sgx_increment_monotonic_counter(&mc,&mc_value);
