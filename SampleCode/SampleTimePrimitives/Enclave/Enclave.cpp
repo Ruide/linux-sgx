@@ -67,6 +67,14 @@ void ecall_trusted_time_primitives(void)
     } else {
         printf("trusted time successfully received and timestamp value is %d\n", current_timestamp);
     }
+
+    ret = sgx_close_pse_session();
+    if(ret != SGX_SUCCESS)
+    {
+        goto_error(ret);
+    } else {
+        printf("pse session successfully closed\n");
+    }
 }
 
 void ecall_monotonic_counter_primitives(void)
@@ -118,6 +126,14 @@ void ecall_monotonic_counter_primitives(void)
         goto_error(ret);
     } else {
         printf("monotonic_counter successfully destroyed\n");
+    }
+    
+    ret = sgx_close_pse_session();
+    if(ret != SGX_SUCCESS)
+    {
+        goto_error(ret);
+    } else {
+        printf("pse session successfully closed\n");
     }
 }
 
