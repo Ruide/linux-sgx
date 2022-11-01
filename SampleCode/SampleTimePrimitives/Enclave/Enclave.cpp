@@ -40,7 +40,6 @@
 #include "sgx_tseal.h"
 #include "sgx_tae_service.h"
 #include "string.h"
-#include "sample_libcrypto.h"
 
 void goto_error(int ret);
 
