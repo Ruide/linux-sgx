@@ -39,6 +39,7 @@
 #include "sgx_trts.h"
 #include "sgx_tseal.h"
 #include "sgx_tae_service.h"
+#include "sgx_tcrypto.h"
 #include "string.h"
 
 void goto_error(int ret);
