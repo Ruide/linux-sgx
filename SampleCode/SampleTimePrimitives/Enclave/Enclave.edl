@@ -35,6 +35,7 @@ enclave {
     from "sgx_tae_service.edl" import *;
 
     trusted {
+        public void ecall_sgx_rsa3072_sign(void);
         public void ecall_trusted_time_primitives(void);
         public void ecall_monotonic_counter_primitives(void);
     };

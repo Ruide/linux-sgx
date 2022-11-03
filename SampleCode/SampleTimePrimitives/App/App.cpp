@@ -253,6 +253,7 @@ int SGX_CDECL main(int argc, char *argv[])
     ecall_thread_functions();
     
     /* Utilize Time Primitives */
+    ecall_sgx_rsa3072_sign(global_eid);
     ecall_trusted_time_primitives(global_eid);
     ecall_monotonic_counter_primitives(global_eid);
 
