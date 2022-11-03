@@ -48,7 +48,7 @@ CFLAGS += -Werror
 RDRAND_LIBDIR := $(LINUX_EXTERNAL_DIR)/rdrand/src
 RDRAND_MAKEFILE := $(RDRAND_LIBDIR)/Makefile
 
-EXTERNAL_LIB += -L$(RDRAND_LIBDIR) -lrdrand -L$(BUILD_DIR) -lsgx_tcrypto
+EXTERNAL_LIB += -L$(RDRAND_LIBDIR) -lrdrand -L$(BUILD_DIR) -L$(SGX_SDK)/lib64 -lsgx_tcrypto
 
 LOCAL_OBJS     := ref_wl.o ref_wl_gen.o parse_key_file.o
 COMMON_OBJS    := sgx_memset_s.o sgx_read_rand.o
