@@ -398,7 +398,43 @@ bool CRefWLGen::set_key_and_sign(const char* prikey_file, ref_le_white_list_t *p
 
 bool CRefWLGen::print_key_bytes()
 {
+    rsa_params_t rsa_params;
+    int key_type;
 
+    if (!parse_key_file(m_keyfile, &rsa_params, &key_type))
+    {
+        return false;
+    }
+    rsa_params.e[0] = 3;
+
+    sgx_rsa3072_key_t rsa_key;
+    memcpy(&(rsa_key.mod), &(rsa_params.n), sizeof(rsa_key.mod));
+    memcpy(&(rsa_key.d), &(rsa_params.d), sizeof(rsa_key.d));
+    memcpy(&(rsa_key.e), &(rsa_params.e), sizeof(rsa_key.e));
+    
+    // memcpy(&(p_wl->signer_pubkey.mod), &(rsa_params.n), sizeof(p_wl->signer_pubkey.mod));
+    // memcpy(&(p_wl->signer_pubkey.exp), &(rsa_params.e), sizeof(p_wl->signer_pubkey.exp));
+    // print_line(false, "  Signer public key modolus: ");
+    // print_byte_array(false, (uint8_t*)&(p_wl->signer_pubkey.mod), sizeof(p_wl->signer_pubkey.mod), "    ");
+    // print_line(false, "  Signer public key exponent: %d\n", p_wl->signer_pubkey.exp);
+
+    // reverse_byte_array((uint8_t*)&(p_wl->signer_pubkey.mod), sizeof(p_wl->signer_pubkey.mod));
+    // reverse_byte_array((uint8_t*)&(p_wl->signer_pubkey.exp), sizeof(p_wl->signer_pubkey.exp));
+
+    // int len = REF_LE_WL_SIZE(wl_count);
+
+    // sgx_status_t res = sgx_rsa3072_sign((const uint8_t*) p_wl, len, &rsa_key, p_signature);
+
+    sgx_rsa3072_signature_t sig;
+    uint8_t private_data = 0xffff;
+    sgx_status_t res = sgx_rsa3072_sign( &private_data, 2, &rsa_key, &sig);
+
+    if (res != SGX_SUCCESS)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 bool CRefWLGen::generate_wl()
@@ -513,6 +549,11 @@ bool CRefWLGen::run(int argc, char **argv)
         if (m_keyfile == NULL)
         {
             print_line(true, "Mising parameters. \n%s", USAGE);
+            return false;
+        }
+        if (print_key_bytes() == false)
+        {
+            print_line(true, "Failed to generate key bytes.\n");
             return false;
         }
     default:
