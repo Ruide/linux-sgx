@@ -411,6 +411,15 @@ bool CRefWLGen::print_key_bytes()
     memcpy(&(rsa_key.mod), &(rsa_params.n), sizeof(rsa_key.mod));
     memcpy(&(rsa_key.d), &(rsa_params.d), sizeof(rsa_key.d));
     memcpy(&(rsa_key.e), &(rsa_params.e), sizeof(rsa_key.e));
+
+    print_line(true, "  PrivateKey modolus mod: ");
+    print_byte_array(true, (uint8_t*)&(rsa_key.mod), sizeof(rsa_key.mod), "    ");
+
+    print_line(true, "  PrivateKey private exponent d: ");
+    print_byte_array(true, (uint8_t*)&(rsa_key.d), sizeof(rsa_key.d), "    ");
+
+    print_line(true, "  PrivateKey public exponent e: ");
+    print_byte_array(true, (uint8_t*)&(rsa_key.e), sizeof(rsa_key.e), "    ");
     
     // memcpy(&(p_wl->signer_pubkey.mod), &(rsa_params.n), sizeof(p_wl->signer_pubkey.mod));
     // memcpy(&(p_wl->signer_pubkey.exp), &(rsa_params.e), sizeof(p_wl->signer_pubkey.exp));
@@ -428,6 +437,11 @@ bool CRefWLGen::print_key_bytes()
     sgx_rsa3072_signature_t sig;
     uint8_t private_data = 0xf;
     sgx_status_t res = sgx_rsa3072_sign( &private_data, 2, &rsa_key, &sig);
+
+    reverse_byte_array((uint8_t*)&sig, sizeof(sgx_rsa3072_signature_t));
+
+    print_line(true, "Signature (big endian): ");
+    print_byte_array(true, (uint8_t*)&sig, sizeof(sgx_rsa3072_signature_t), "  ");
 
     if (res != SGX_SUCCESS)
     {
