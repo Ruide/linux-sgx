@@ -436,7 +436,7 @@ bool CRefWLGen::print_key_bytes()
 
     sgx_rsa3072_signature_t sig;
     uint8_t private_data = 0xf;
-    sgx_status_t res = sgx_rsa3072_sign( &private_data, 2, &rsa_key, &sig);
+    sgx_status_t res = sgx_rsa3072_sign( &private_data, 1, &rsa_key, &sig);
 
     reverse_byte_array((uint8_t*)&sig, sizeof(sgx_rsa3072_signature_t));
 
