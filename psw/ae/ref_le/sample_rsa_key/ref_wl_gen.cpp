@@ -556,6 +556,7 @@ bool CRefWLGen::run(int argc, char **argv)
             print_line(true, "Failed to generate key bytes.\n");
             return false;
         }
+        break;
     default:
         print_line(true, "Command line is not correct. \n%s", USAGE);
         return false;
