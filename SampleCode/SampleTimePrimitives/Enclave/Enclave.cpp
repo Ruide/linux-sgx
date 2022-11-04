@@ -95,6 +95,23 @@ void ecall_sgx_rsa3072_sign(void)
         }
         printf("\n");
     }
+    
+    sgx_rsa_result_t verify_result = SGX_RSA_INVALID_SIGNATURE;
+    sgx_rsa3072_public_key_t rsa_public_key;
+    memcpy(&(rsa_public_key.exp), &(rsa_key.e), sizeof(rsa_public_key.exp));
+    memcpy(&(rsa_public_key.mod), &(rsa_key.mod), sizeof(rsa_public_key.mod));
+    ret = sgx_rsa3072_verify( &private_data, 1, &rsa_public_key, &sig, &verify_result);
+    if (ret != SGX_SUCCESS)
+    {
+        goto_error(ret);
+    } else {
+        if (verify_result == SGX_RSA_VALID)
+        {
+            printf("sgx_rsa3072_verify passes\n");
+        } else {
+            printf("sgx_rsa3072_verify does not pass\n");
+        }
+    }
 }
 
 void ecall_trusted_time_primitives(void)
