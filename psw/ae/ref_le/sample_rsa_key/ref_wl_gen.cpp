@@ -412,7 +412,7 @@ bool CRefWLGen::print_key_bytes()
     memcpy(&(rsa_key.d), &(rsa_params.d), sizeof(rsa_key.d));
     memcpy(&(rsa_key.e), &(rsa_params.e), sizeof(rsa_key.e));
 
-    print_line(true, "  PrivateKey modolus mod: ");
+    print_line(true, "  PrivateKey modolus mod (aka. public key): ");
     print_byte_array(true, (uint8_t*)&(rsa_key.mod), sizeof(rsa_key.mod), "    ");
 
     print_line(true, "  PrivateKey private exponent d: ");
